@@ -8,6 +8,7 @@ import CustomMap from '../components/Map/GoogleMapWidget'
 import { IoMap } from 'react-icons/io5'
 import { FaListUl } from 'react-icons/fa'
 import styles from '../styles/Home.module.css'
+import { useCategoryContext } from '../contexts/CategoryContext'
 
 const Home = () => {
 
@@ -19,6 +20,8 @@ const Home = () => {
         const data = homes.filter((home) => home.category === selection)
         setData(data)
     }, [])
+
+  const {categories,dataToDisplay, updateCategory, categoryList,  setcategoryList} = useCategoryContext()
 
     const filterData = (e) => {
         setselection(e.text)
@@ -33,13 +36,15 @@ const Home = () => {
             <div className={styles.header}>
                 <Header />
             </div>
-            
+            {
+                console.log(categories)
+            }
+            {
+                console.log(dataToDisplay,"dataToDisplay")
+            }
             <div className={styles.main} style={{ paddingTop: showMap ? "0" : "100px" }}>
                 <div className={styles.sticky_header}>
-                    <Badges
-                        active={selection}
-                        onClick={(e) => filterData(e)}
-                    />
+                    <Badges/>
                 </div>
                 {
                     showMap ?
@@ -47,7 +52,7 @@ const Home = () => {
                         :
                         <div className={styles.card_container}>
                             {
-                                data?.map((home, index) => (
+                                dataToDisplay?.map((home, index) => (
                                     <div className={styles.col} key={index}>
                                         <Cards data={home} />
                                     </div>
