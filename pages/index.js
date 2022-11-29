@@ -9,25 +9,14 @@ import { IoMap } from 'react-icons/io5'
 import { FaListUl } from 'react-icons/fa'
 import styles from '../styles/Home.module.css'
 import { useCategoryContext } from '../contexts/CategoryContext'
+import { useLoadingContext } from '../contexts/LoadingContext'
+import SkeletonLoader from '../components/SkeletonLoader'
+import Notfound from '../components/Notfound'
 
 const Home = () => {
 
-    const [data, setData] = useState([])
-
-    const [selection, setselection] = useState('OMG!')
-
-    useEffect(() => {
-        const data = homes.filter((home) => home.category === selection)
-        setData(data)
-    }, [])
-
-  const {categories,dataToDisplay, updateCategory, categoryList,  setcategoryList} = useCategoryContext()
-
-    const filterData = (e) => {
-        setselection(e.text)
-        const data = homes.filter((home) => home.category === e.text)
-        setData(data)
-    }
+    const { categories, dataToDisplay, updateCategory, categoryList, setcategoryList } = useCategoryContext()
+    const { loading } = useLoadingContext()
 
     const [showMap, setshowMap] = useState(false)
 
@@ -36,29 +25,30 @@ const Home = () => {
             <div className={styles.header}>
                 <Header />
             </div>
-            {
-                console.log(categories)
-            }
-            {
-                console.log(dataToDisplay,"dataToDisplay")
-            }
             <div className={styles.main} style={{ paddingTop: showMap ? "0" : "100px" }}>
                 <div className={styles.sticky_header}>
-                    <Badges/>
+                    <Badges />
                 </div>
                 {
-                    showMap ?
-                        <CustomMap data={data} />
+                    loading ?
+                        <SkeletonLoader />
                         :
-                        <div className={styles.card_container}>
-                            {
-                                dataToDisplay?.map((home, index) => (
-                                    <div className={styles.col} key={index}>
-                                        <Cards data={home} />
-                                    </div>
-                                ))
-                            }
-                        </div>
+                        showMap ?
+                            <CustomMap data={dataToDisplay} />
+                            :
+                                dataToDisplay.length > 0 ?
+                                <div className={styles.card_container}>
+                                    {
+                                        dataToDisplay?.map((home, index) => (
+                                            <div className={styles.col} key={index}>
+                                                <Cards data={home} />
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                                :
+                                <Notfound/>
+
                 }
             </div>
 
@@ -86,6 +76,7 @@ const Home = () => {
                         </>
                 }
             </div>
+
             <div className={styles.map_btn_mobile}
                 onClick={() => setshowMap(!showMap)}
             >
@@ -103,6 +94,7 @@ const Home = () => {
                         </>
                 }
             </div>
+
         </section>
     )
 }

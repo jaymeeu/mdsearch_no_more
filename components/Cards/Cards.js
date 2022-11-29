@@ -56,11 +56,10 @@ function Cards({ data }) {
                
             </div>
             <div className={styles.greyer}>
-                Hosted by {data?.host?.host_name}
+                <span>Hosted by {data?.host?.host_name}</span>
+               <span>{data?.address?.country}</span> 
             </div>
-            <div className={styles.greyer}>
-                {/* {moment(data?.dateFrom).format('MMM DD')} - {moment(data?.dateTill).format('MMM DD')} */}
-            </div>
+            
             <div className={styles.price}>
                <div>${data?.price?.$numberDecimal} <span>night</span></div> 
             </div>

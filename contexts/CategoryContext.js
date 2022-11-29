@@ -10,12 +10,15 @@ const CategoryContextProvider = ({ children }) => {
 
     const [categoryList, setcategoryList] = useState([])
 
+    const [activeCategory, setactiveCategory] = useState('')
+
     const updateCategory = (cat, data) =>{
-      // setcategories(data)
-      if (categories[cat]){
-        setdataToDisplay(categories[cat])
-      }
-      else{
+      // console.log(cat,data, "hjshdjdhgghsgssgsg")
+
+      // if (categories[cat]){
+      //   setdataToDisplay(categories[cat])
+      // }
+      // else{
         let catInstance  = categories
         catInstance[cat] = data
         setcategories(catInstance)
@@ -24,7 +27,7 @@ const CategoryContextProvider = ({ children }) => {
 
         // setcategories((prev)=> ({
         //   prev[cat] })
-      }
+      // }
 
     }
 
@@ -35,6 +38,8 @@ const CategoryContextProvider = ({ children }) => {
           categoryList,
           setcategoryList,
           dataToDisplay,
+          setactiveCategory,
+          activeCategory
         }}>
           {children}
         </CategoryContext.Provider>

@@ -10,10 +10,10 @@ import "swiper/css/navigation";
 import styles from './Badges.module.css'
 import Image from 'next/image'
 import { useCategoryContext } from '../../contexts/CategoryContext';
+import { useLoadingContext } from '../../contexts/LoadingContext';
+import { useRouter } from 'next/router';
 
 export default function Badges() {
-
-  const [active, setactive] = useState('')
 
   useEffect(() => {
     getData()
@@ -24,11 +24,18 @@ export default function Badges() {
     categories,
     updateCategory,
     categoryList,
-    setcategoryList } = useCategoryContext()
+    setcategoryList, 
+    setactiveCategory,
+    activeCategory
+   } = useCategoryContext()
+
+   const { setLoading} = useLoadingContext()
 
   const getData = async () => {
+    setLoading(true)
+
     if (categoryList.length === 0) {
-      await fetch('http://localhost:5050/category')
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}category`)
         .then((response) => response.json())
         .then(async (data) => {
           setcategoryList(data.map((datum, i) => {
@@ -40,15 +47,23 @@ export default function Badges() {
             )
           })
           )
-          setactive(data[0])
+          setactiveCategory(data[0])
 
-          await fetch(`http://localhost:5050/category_list/${data[0]}`)
+        //   let search_params = JSON.stringify({
+        //     street: "barcelona",
+        //     country: "spain", 
+        //     category: data[0]
+        // })
+          await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}category_list/${data[0]}`)
             .then((response) => response.json())
             .then(async (res) => {
               updateCategory(data[0], res)
             })
+            .catch((err)=>console.log(err))
         }
         )
+        .catch((err)=>console.log(err))
+        .finally(()=> setLoading(false))
     }
     else {
       console.log("helo deate")
@@ -95,24 +110,36 @@ export default function Badges() {
   }
 
   const getCategoryData = async (category) => {
-
+    setLoading(true)
     if (categories[category]) {
       updateCategory(category, categories[category])
+      setLoading(false)
     }
     else {
-      await fetch(`http://localhost:5050/category_list/${category}`)
+      let search_params = JSON.stringify({
+        street: "barcelona",
+        country: "spain", 
+        category: category
+    })
+
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}category_list/${category}`)
         .then((response) => response.json())
         .then(async (res) => {
           updateCategory(category, res)
         })
+        .catch((err)=>console.log(err))
+        .finally(()=> setLoading(false))
     }
   }
 
   // const [active, setactive] = useState('')
+  const router = useRouter();
 
   const handleClick = (badge) => {
-    setactive(badge.text)
+    setactiveCategory(badge.text)
     getCategoryData(badge.text)
+    router.query.category = badge.text
+    router.push(router)
   }
 
   return (
@@ -134,12 +161,12 @@ export default function Badges() {
                 className={styles.badges}
                 id='badges'
                 onClick={() => handleClick(badge)}
-                style={{ color: badge.text === active ? "#000000" : "#717171" }}
+                style={{ color: badge.text === activeCategory ? "#000000" : "#717171" }}
               >
                 <Image id='image' src={badge.image} alt={badge?.text}
-                  style={{ opacity: badge.text === active ? "1" : "0.6" }}
+                  style={{ opacity: badge.text === activeCategory ? "1" : "0.6" }}
                 />
-                <span id='tab_flex' className={badge.text === active ? styles.tab_flex_active : styles.tab_flex}>
+                <span id='tab_flex' className={badge.text === activeCategory ? styles.tab_flex_active : styles.tab_flex}>
                   {badge.text}
                 </span>
               </div>

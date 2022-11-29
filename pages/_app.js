@@ -1,11 +1,14 @@
 import CategoryContextProvider from '../contexts/CategoryContext'
+import LoadingContextProvider from '../contexts/LoadingContext'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <CategoryContextProvider>
-      <Component {...pageProps} />
-    </CategoryContextProvider>
+    <LoadingContextProvider>
+      <CategoryContextProvider>
+        <Component {...pageProps} />
+      </CategoryContextProvider>
+    </LoadingContextProvider>
   )
 }
 

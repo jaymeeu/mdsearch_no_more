@@ -19,24 +19,23 @@ function CardV2({ data }) {
                     spaceBetween={0}
                     className={styles.mySwiper}
                 >
-                    {
-                        data?.images?.map((img, index) => (
-                            <SwiperSlide key={index}>
-                                <img className={styles.imagesv2} src={img} />
-                            </SwiperSlide>
-                        ))
-                    }
+                    <SwiperSlide className={styles.swiper_slide_}>
+                        <img className={styles.images} src={data?.images?.picture_url} alt={data._id} />
+                    </SwiperSlide>
                 </Swiper>
             </div>
             <div className={styles.space_between} style={{ marginTop: '12px' }}>
-                <span className={styles.place_name}>{data?.title}</span>
-                <div className={styles.stars}>
-                    <AiFillStar color='black' />
-                    <span>{data?.rating}</span>
-                </div>
+                <span className={styles.place_name}>{data?.name}</span>
+                {
+                    data?.review_scores?.review_scores_rating && 
+                        <div className={styles.stars}>
+                        <AiFillStar color='black' />
+                         <span>{(data?.review_scores?.review_scores_rating / 20).toFixed(1)}</span>
+                    </div>
+                }
             </div>
             <div className={styles.price}>
-                ${data?.price} <span>night</span> &#8729; <span className={styles.greyer}>{data?.period}</span>
+               <div> ${data?.price?.$numberDecimal} <span>night</span></div>
             </div>
         </div>
     )
