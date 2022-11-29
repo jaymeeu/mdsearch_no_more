@@ -36,11 +36,6 @@ let app = express();
 
 app.use(cors());
 
-const category = [{
-  '$project': {
-    'property_type': 1,
-  }
-}]
 
 app.get("/", async (req, res) => {
   let results = [];
@@ -52,7 +47,6 @@ app.get("/", async (req, res) => {
   }
   res.send(results).status(200);
 
-  // res.send({ status: "Ok", dbConnected }).status(200);
 });
 
 //get all categories
@@ -67,19 +61,108 @@ app.get("/category", async (req, res) => {
   res.send(results).status(200);
 });
 
+
 //get items in each category
 app.get("/category_list/:category", async (req, res) => {
+  const queries = JSON.parse(req.params.category)
+  
+  
+  const searcher_aggregate = 
+    queries.street !== '' && queries.country === '' ?
+   {
+    "$search": {
+      "index": 'search_home',
+      "compound": {
+        "must": [
+        {"text": {
+          "query": queries.street,
+          "path": 'address.street',
+          "fuzzy": {}
+        }},
+        { "text": {
+          "query": queries.category,
+          "path": 'property_type',
+          "fuzzy": {}
+        }}
+      ]}
+    }
+  }
+  :
+  queries.street === '' && queries.country !== '' ?
+  {
+    "$search": {
+      "index": 'search_home',
+      "compound": {
+        "must": [
+       { "text": {
+          "query": queries.country,
+          "path": 'address.country',
+          "fuzzy": {}
+        }},
+        { "text": {
+          "query": queries.category,
+          "path": 'property_type',
+          "fuzzy": {}
+        }}
+      ]}
+    }
+  }
+  :
+  queries.street === '' && queries.country === '' ?
+  {
+    "$search": {
+      "index": 'search_home',
+      "compound": {
+        "must": [
+        { "text": {
+          "query": queries.category,
+          "path": 'property_type',
+          "fuzzy": {}
+        }}
+      ]}
+    }
+  }
+  :
+  {
+    "$search": {
+      "index": 'search_home',
+      "compound": {
+        "must": [
+        {"text": {
+          "query": queries.street,
+          "path": 'address.street',
+          "fuzzy": {}
+        }},
+       { "text": {
+          "query": queries.country,
+          "path": 'address.country',
+          "fuzzy": {}
+        }},
+        { "text": {
+          "query": queries.category,
+          "path": 'property_type',
+          "fuzzy": {}
+        }}
+      ]}
+    }
+  }
+
+
   let results = [];
+
   try {
     results = await itemCollection.aggregate(
       [
-        {
-          '$match': {
-            'property_type': {
-              '$eq': req.params.category
-            }
-          }
-        }, {
+        // {
+        //   '$match': {
+        //     'property_type': {
+        //       '$eq': "Apartment"
+        //       // '$eq': req.params.category
+        //     }
+        //   }
+        // }
+          searcher_aggregate
+        , {
           '$project': {
             'accommodates': 1,
             'price': 1,
@@ -98,6 +181,7 @@ app.get("/category_list/:category", async (req, res) => {
   catch (e) {
     console.log(e.toString());
   }
+  // console.log(results, "results")
   res.send(results).status(200);
 });
 
