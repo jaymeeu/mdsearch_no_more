@@ -67,6 +67,7 @@ function CustomMap({ google, data }) {
             position={{ lat: coords?.address?.location?.coordinates[1], lng: coords?.address?.location?.coordinates[0] }}
             onClick={(e)=>onMarkerClick(e, coords)}
             name={coords?.name}
+            key={coords?._id}
             icon={{
               url: airbnbIcon,
               anchor: new google.maps.Point(16,16),
