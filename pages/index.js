@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import Footer from '../components/Footer/Footer'
-import Header from '../components/Header/Header'
+import Header from '../components/Header'
 import Badges from '../components/Badges'
-import Cards from '../components/Cards/Cards'
+import Cards from '../components/Cards'
 import { homes } from '../public/homes'
 import CustomMap from '../components/Map/GoogleMapWidget'
 import { IoMap } from 'react-icons/io5'
@@ -12,6 +11,7 @@ import { useCategoryContext } from '../contexts/CategoryContext'
 import { useLoadingContext } from '../contexts/LoadingContext'
 import SkeletonLoader from '../components/SkeletonLoader'
 import Notfound from '../components/Notfound'
+import Footer from '../components/Footer'
 
 const Home = () => {
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styles from './Header.module.css'
+import styles from './styles.module.css'
 import logo from '../../public/images/logo.png'
 import { BiSearch, BiMenu } from 'react-icons/bi'
 import { HiOutlineGlobeAlt } from 'react-icons/hi'

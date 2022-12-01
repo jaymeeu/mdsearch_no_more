@@ -6,7 +6,7 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { AiFillStar } from 'react-icons/ai'
 import { FiHeart } from 'react-icons/fi'
-import styles from "./Cards.module.css";
+import styles from "./styles.module.css";
 
 function CardV2({ data }) {
     return (

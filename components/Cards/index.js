@@ -3,7 +3,7 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import styles from "./Cards.module.css";
+import styles from "./styles.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import { AiFillStar, AiTwotoneEdit } from 'react-icons/ai'
