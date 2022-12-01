@@ -4,7 +4,6 @@ import logo from '../../public/images/logo.png'
 import { BiSearch, BiMenu } from 'react-icons/bi'
 import { HiOutlineGlobeAlt } from 'react-icons/hi'
 import { FaUserCircle } from 'react-icons/fa'
-import { ImEqualizer } from 'react-icons/im'
 import Image from 'next/image'
 import { useCategoryContext } from '../../contexts/CategoryContext'
 import { useLoadingContext } from '../../contexts/LoadingContext'
@@ -14,7 +13,6 @@ import { GrLocation } from 'react-icons/gr'
 const Header = () => {
 
     const ref = useRef(null);
-    //   const { handleClickAway } = props;
     const handleClickAway = () => setshow(false)
 
     useEffect(() => {
