@@ -20,12 +20,12 @@ https://windcnc.netlify.app/
 ### Screenshots
 
 
-####Landing page
+#### Landing page
 Showing a list of homes in each category `property_type` 
 ![home page](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/03tjsu8vy1cdiaf1ltdw.png)
 
 
-####Loading state
+#### Loading state
 Showing the loading state of the landing page
 ![loading](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hrp7e8wc5vahoe5buqqt.png)
 
