@@ -1,3 +1,4 @@
+
 import { Map, Marker, GoogleApiWrapper, InfoWindow } from 'google-maps-react'
 import { useState } from 'react'
 import mapStyles from './mapStyles.json'
@@ -21,6 +22,7 @@ function CustomMap({ google, data }) {
     setshowInfoWindow(true)
     setactiveMarker(marker)
     setinfoWindowData(data)
+    // console.log(marker, "maket")
   }
 
   const onMapClick = () => {
@@ -29,11 +31,10 @@ function CustomMap({ google, data }) {
   }
 
   const getCenter = ()=>{
-    let maxLng = Math.max(...data.map(o => parseFloat(o.lng)))
-    let minLng = Math.min(...data.map(o => parseFloat(o.lng)))
-    let maxLat = Math.max(...data.map(o => parseFloat(o.lat)))
-    let minLat = Math.min(...data.map(o => parseFloat(o.lat)))
-
+    let maxLng = Math.max(...data.map(o => parseFloat(o.address?.location?.coordinates[0])))
+    let minLng = Math.min(...data.map(o => parseFloat(o.address?.location?.coordinates[0])))
+    let maxLat = Math.max(...data.map(o => parseFloat(o.address?.location?.coordinates[1])))
+    let minLat = Math.min(...data.map(o => parseFloat(o.address?.location?.coordinates[1])))
     return { lat: (maxLat + minLat)/2, lng: (maxLng + minLng)/2 }
     
   }
@@ -52,19 +53,21 @@ function CustomMap({ google, data }) {
         height: "100%"
       }}
       onClick={onMapClick}
-      // center={getCenter()}
-      initialCenter= {getCenter()}
-      zoom={data.length === 1 ? 18 : 11}
+      center={getCenter()}
+      initialCenter={getCenter()}
+      zoom={data.length === 1 ? 18 : data.length > 10 ? 12 : 16}
       disableDefaultUI={true}
       onReady={(mapProps, map) => mapLoaded(mapProps, map)}
 
     >
+
       {data?.map(
         coords => (
           <Marker
-            position={{ lat: coords?.lat, lng: coords.lng }}
+            position={{ lat: coords?.address?.location?.coordinates[1], lng: coords?.address?.location?.coordinates[0] }}
             onClick={(e)=>onMarkerClick(e, coords)}
-            name={coords?.title}
+            name={coords?.name}
+            key={coords?._id}
             icon={{
               url: airbnbIcon,
               anchor: new google.maps.Point(16,16),
@@ -73,7 +76,6 @@ function CustomMap({ google, data }) {
           />
         )
       )}
-
       <InfoWindow
         position={activeMarker.position}
         visible={showInfoWindow}>
@@ -87,5 +89,5 @@ function CustomMap({ google, data }) {
 };
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyBePOD_QqU32z1xEsrW5SUESDMXelMJk3U"
+  apiKey: `${process.env.NEXT_PUBLIC_MAP_KEY}`
 })(CustomMap);

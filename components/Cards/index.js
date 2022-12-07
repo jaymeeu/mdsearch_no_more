@@ -3,7 +3,7 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import styles from "./Cards.module.css";
+import styles from "./styles.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import { AiFillStar, AiTwotoneEdit } from 'react-icons/ai'
@@ -12,7 +12,7 @@ import { FiHeart } from 'react-icons/fi'
 import Image from 'next/image';
 import { BsTrashFill } from 'react-icons/bs';
 
-function Cards({ data, showDelete,editClick, deleteClick }) {
+function Cards({ data }) {
 
     const [showPagination, setshowPagination] = useState(false)
     return (
@@ -36,29 +36,32 @@ function Cards({ data, showDelete,editClick, deleteClick }) {
                     className={styles.swiper_cont}
                 >
                     {
-                        data?.images?.map((img, index) => (
-                            <SwiperSlide key={index} className={styles.swiper_slide_}>
-                                <img className={styles.images} src={img} alt={index} />
+                        // data?.images?.map((img, index) => (
+                            <SwiperSlide className={styles.swiper_slide_}>
+                                <img className={styles.images} src={data?.images?.picture_url} alt={data._id} />
                             </SwiperSlide>
-                        ))
+                        // ))
                     }
                 </Swiper>
             </div>
             <div className={styles.space_between} style={{ marginTop: '12px' }}>
-                <span className={styles.place_name}>{data?.title}</span>
-                <div className={styles.stars}>
-                    <AiFillStar color='black' />
-                    <span>4.52</span>
-                </div>
+                <span className={styles.place_name}>{data?.name}</span>
+                {
+                    data?.review_scores?.review_scores_rating && 
+                        <div className={styles.stars}>
+                        <AiFillStar color='black' />
+                         <span>{(data?.review_scores?.review_scores_rating / 20).toFixed(1)}</span>
+                    </div>
+                }
+               
             </div>
             <div className={styles.greyer}>
-                Hosted by {data?.host?.fullname}
+                <span>Hosted by {data?.host?.host_name}</span>
+               <span>{data?.address?.country}</span> 
             </div>
-            <div className={styles.greyer}>
-                {/* {moment(data?.dateFrom).format('MMM DD')} - {moment(data?.dateTill).format('MMM DD')} */}
-            </div>
+            
             <div className={styles.price}>
-               <div>${data?.price} <span>night</span></div> 
+               <div>${data?.price?.$numberDecimal} <span>night</span></div> 
             </div>
         </div>
     )
