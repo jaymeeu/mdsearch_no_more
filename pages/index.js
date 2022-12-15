@@ -48,7 +48,6 @@ const Home = () => {
                                 </div>
                                 :
                                 <Notfound/>
-
                 }
             </div>
 
