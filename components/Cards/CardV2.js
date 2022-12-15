@@ -40,5 +40,4 @@ function CardV2({ data }) {
         </div>
     )
 }
-
 export default CardV2
