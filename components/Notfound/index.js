@@ -9,7 +9,7 @@ const Notfound = () => {
         <Image className={styles.images} 
             src={not_found} 
         alt='not found'/>
-        <div className={styles.text}>Home not found</div>
+        <div className={styles.text}>Server is spinning up, hit refresh and see the magic</div>
     </div>
   )
 }
